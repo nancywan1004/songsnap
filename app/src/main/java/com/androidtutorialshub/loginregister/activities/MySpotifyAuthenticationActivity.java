@@ -3,7 +3,7 @@ package com.androidtutorialshub.loginregister.activities;
 import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
-import android.support.v7.app.AppCompatActivity;
+import androidx.appcompat.app.AppCompatActivity;
 import android.util.Log;
 
 import com.androidtutorialshub.loginregister.MainActivity;
@@ -13,8 +13,8 @@ import com.spotify.sdk.android.authentication.AuthenticationResponse;
 
 public class MySpotifyAuthenticationActivity extends AppCompatActivity {
     // Request code will be used to verify if result comes from the login activity. Can be set to any integer.
-    private static final String CLIENT_ID = "2ada74d318da4ad79db8414871086494";
-    private static final String REDIRECT_URI = "songsnap://callback/";
+    public static final String CLIENT_ID = "2ada74d318da4ad79db8414871086494";
+    public static final String REDIRECT_URI = "songsnap://callback/";
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +42,8 @@ public class MySpotifyAuthenticationActivity extends AppCompatActivity {
                 case TOKEN:
                     Log.d("MySpotifyAuthenticationActivity", "Authorized! Yay!");
                     Intent intentMain = new Intent(getApplicationContext(), MainActivity.class);
+                    intentMain.putExtra("CLIENT_ID", CLIENT_ID);
+                    intentMain.putExtra("REDIRECT_URI", REDIRECT_URI);
                     startActivity(intentMain);
                     // Handle successful response
                     break;
