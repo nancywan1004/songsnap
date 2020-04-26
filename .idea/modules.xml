@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="ProjectModuleManager">
+    <modules>
+      <module fileurl="file://$PROJECT_DIR$/app/app.iml" filepath="$PROJECT_DIR$/app/app.iml" />
+      <module fileurl="file://$PROJECT_DIR$/song-snap-master.iml" filepath="$PROJECT_DIR$/song-snap-master.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spotify-app-remote/spotify-app-remote.iml" filepath="$PROJECT_DIR$/spotify-app-remote/spotify-app-remote.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spotify-app-remote-release-0.6.2/spotify-app-remote-release-0.6.2.iml" filepath="$PROJECT_DIR$/spotify-app-remote-release-0.6.2/spotify-app-remote-release-0.6.2.iml" />
+      <module fileurl="file://$PROJECT_DIR$/spotify-auth-release-1.1.0/spotify-auth-release-1.1.0.iml" filepath="$PROJECT_DIR$/spotify-auth-release-1.1.0/spotify-auth-release-1.1.0.iml" />
+    </modules>
+  </component>
+</project>
