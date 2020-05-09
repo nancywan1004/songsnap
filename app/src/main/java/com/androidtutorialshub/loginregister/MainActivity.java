@@ -1,7 +1,11 @@
 package com.androidtutorialshub.loginregister;
 
 import android.content.Intent;
+import android.graphics.Bitmap;
+import android.net.Uri;
 import android.os.Bundle;
+
+import com.androidtutorialshub.loginregister.activities.TimerPageActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
 import android.view.View;
@@ -16,6 +20,7 @@ import android.view.MenuItem;
 
 import android.util.Log;
 import android.widget.Button;
+import android.widget.ImageView;
 
 import com.androidtutorialshub.loginregister.activities.TipsActivity;
 import com.androidtutorialshub.loginregister.activities.SongListActivity;
@@ -24,7 +29,9 @@ import com.spotify.android.appremote.api.ConnectionParams;
 import com.spotify.android.appremote.api.Connector;
 import com.spotify.android.appremote.api.SpotifyAppRemote;
 
+import com.spotify.protocol.client.CallResult;
 import com.spotify.protocol.client.Subscription;
+import com.spotify.protocol.types.ImageUri;
 import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 
@@ -71,7 +78,7 @@ public class MainActivity extends AppCompatActivity
         new_snap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentMain = new Intent(getApplicationContext(), TipsActivity.class);
+                Intent intentMain = new Intent(getApplicationContext(), TimerPageActivity.class);
                 startActivity(intentMain);
                 Log.i("Content "," Go to Tips page. ");
             }
@@ -83,7 +90,7 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Intent intentMain = new Intent(getApplicationContext(), SongListActivity.class);
                 startActivity(intentMain);
-                Log.i("Content "," Go to Tips page. ");
+                Log.i("Content "," Go to History page. ");
             }
         });
 
@@ -206,6 +213,14 @@ public class MainActivity extends AppCompatActivity
                         song.setAlbum(track.album.name);
 
                         songDBHelper.addSong(song);
+
+                        final ImageView imgView = (ImageView) findViewById(R.id.trackImg);
+                        mSpotifyAppRemote.getImagesApi().getImage(track.imageUri).setResultCallback(new CallResult.ResultCallback<Bitmap>() {
+                            @Override
+                            public void onResult(Bitmap bitmap) {
+                                imgView.setImageBitmap(bitmap);
+                            }
+                        });
 
                         final Button button = (Button) findViewById(R.id.start_playing);
 

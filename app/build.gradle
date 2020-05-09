@@ -33,4 +33,7 @@ dependencies {
     implementation project(':spotify-app-remote')
     implementation project(':spotify-auth-release-1.1.0')// Maven dependency
     implementation "com.google.code.gson:gson:2.8.5"
+    implementation 'com.github.HBiSoft:HBRecorder:0.1.7'
 }
+
+
