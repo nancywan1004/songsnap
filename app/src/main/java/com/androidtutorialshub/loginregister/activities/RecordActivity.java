@@ -16,6 +16,7 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.Toast;
 
+import java.io.File;
 import java.io.IOException;
 import java.util.Random;
 
@@ -52,7 +53,7 @@ public class RecordActivity extends AppCompatActivity {
 
         buttonStop.setEnabled(false);
         buttonPlayLastRecordAudio.setEnabled(false);
-        buttonStopPlayingRecording.setEnabled(false);
+        buttonStopPlayingRecording.setEnabled(true);
         buttonShare.setEnabled(false);
 
         random = new Random();
@@ -63,7 +64,6 @@ public class RecordActivity extends AppCompatActivity {
             public void onClick(View view) {
                 Intent intentMain = new Intent(getApplicationContext(), MainActivity.class);
                 startActivity(intentMain);
-                Log.i("Content "," Main layout ");
             }
         });
 
@@ -128,13 +128,19 @@ public class RecordActivity extends AppCompatActivity {
 
                 mediaPlayer = new MediaPlayer();
                 try {
-                    mediaPlayer.setDataSource(AudioSavePathInDevice);
+//                    mediaPlayer.setDataSource(AudioSavePathInDevice);
+                    mediaPlayer.setDataSource(getApplicationContext(), Uri.fromFile(new File(getIntent().getStringExtra("SONG_AUDIO"))));
+                    mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+                        @Override
+                        public void onPrepared(MediaPlayer mp) {
+                            mediaPlayer.start();
+                        }
+                    });
                     mediaPlayer.prepare();
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
 
-                mediaPlayer.start();
                 Toast.makeText(RecordActivity.this, "Recording Playing",
                         Toast.LENGTH_LONG).show();
             }
@@ -150,8 +156,12 @@ public class RecordActivity extends AppCompatActivity {
                 buttonShare.setEnabled(true);
 
                 if (mediaPlayer != null) {
-                    mediaPlayer.stop();
+                    if (mediaPlayer.isPlaying()) {
+                        mediaPlayer.stop();
+                    }
+                    mediaPlayer.reset();
                     mediaPlayer.release();
+                    mediaPlayer = null;
                     MediaRecorderReady();
                 }
             }

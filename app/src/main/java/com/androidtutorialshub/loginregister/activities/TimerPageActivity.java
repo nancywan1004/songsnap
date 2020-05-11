@@ -9,6 +9,9 @@ import com.androidtutorialshub.loginregister.R;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.hbisoft.hbrecorder.HBRecorder;
 import com.hbisoft.hbrecorder.HBRecorderListener;
+import com.spotify.android.appremote.api.ConnectionParams;
+import com.spotify.android.appremote.api.Connector;
+import com.spotify.android.appremote.api.SpotifyAppRemote;
 
 import androidx.annotation.IntegerRes;
 import androidx.appcompat.app.AppCompatActivity;
@@ -37,6 +40,7 @@ import java.io.File;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.Random;
+import java.util.concurrent.TimeUnit;
 
 import static android.Manifest.permission.RECORD_AUDIO;
 import static android.Manifest.permission.WRITE_EXTERNAL_STORAGE;
@@ -45,8 +49,8 @@ import static com.androidtutorialshub.loginregister.activities.RecordActivity.Re
 public class TimerPageActivity extends AppCompatActivity implements HBRecorderListener {
     HBRecorder hbRecorder;
     String AudioSavePathInDevice = null;
-    String RandomAudioFileName = "SONGPIECE";
     private static final int SCREEN_RECORD_REQUEST_CODE = 22;
+    private SpotifyAppRemote mSpotifyAppRemote;
     public static final int RequestPermissionCode = 1;
 
     TextView timerTextView;
@@ -73,6 +77,15 @@ public class TimerPageActivity extends AppCompatActivity implements HBRecorderLi
         public void onCreate(Bundle savedInstanceState) {
             super.onCreate(savedInstanceState);
             setContentView(R.layout.activity_countdown);
+
+            FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
+            fab.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent intentMain = new Intent(getApplicationContext(), MainActivity.class);
+                    startActivity(intentMain);
+                }
+            });
 
             timerTextView = (TextView) findViewById(R.id.timerView);
 
@@ -104,10 +117,13 @@ public class TimerPageActivity extends AppCompatActivity implements HBRecorderLi
                         bv.setTag(R.drawable.play_button);
 
                         hbRecorder.stopScreenRecording();
+                        mSpotifyAppRemote.getPlayerApi().pause();
                         Toast.makeText(TimerPageActivity.this, "Recording Completed",
                                 Toast.LENGTH_LONG).show();
 
                         Intent intentRecord = new Intent(getApplicationContext(), RecordActivity.class);
+                        String fileName = hbRecorder.getFileName();
+                        AudioSavePathInDevice = AudioSavePathInDevice + "/" + fileName;
                         intentRecord.putExtra("SONG_AUDIO", AudioSavePathInDevice);
                         startActivity(intentRecord);
                     }
@@ -117,10 +133,30 @@ public class TimerPageActivity extends AppCompatActivity implements HBRecorderLi
             //Init HBRecorder
             hbRecorder = new HBRecorder(this, this);
 
-
-
         }
 
+        @Override
+        protected void onStart() {
+            super.onStart();
+            String currClientID = getIntent().getStringExtra("CLIENT_ID");
+            String currRedirectURI = getIntent().getStringExtra("REDIRECT_URI");
+            ConnectionParams connectionParams =
+                    new ConnectionParams.Builder(currClientID)
+                            .setRedirectUri(currRedirectURI)
+                            .showAuthView(true)
+                            .build();
+            SpotifyAppRemote.connect(this, connectionParams, new Connector.ConnectionListener() {
+                @Override
+                public void onConnected(SpotifyAppRemote spotifyAppRemote) {
+                    mSpotifyAppRemote = spotifyAppRemote;
+                }
+
+                @Override
+                public void onFailure(Throwable throwable) {
+                    Log.e("TimerPageActivity", throwable.getMessage(), throwable);
+                }
+            });
+        }
 
         @Override
         public void onPause() {
@@ -199,4 +235,9 @@ public class TimerPageActivity extends AppCompatActivity implements HBRecorderLi
         Log.e("HBRecorderError", reason);
     }
 
+    @Override
+    protected void onStop() {
+        super.onStop();
+        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
+    }
 }

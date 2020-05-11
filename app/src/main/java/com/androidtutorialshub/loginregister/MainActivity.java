@@ -2,12 +2,12 @@ package com.androidtutorialshub.loginregister;
 
 import android.content.Intent;
 import android.graphics.Bitmap;
-import android.net.Uri;
 import android.os.Bundle;
 
 import com.androidtutorialshub.loginregister.activities.TimerPageActivity;
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.android.material.snackbar.Snackbar;
+
 import android.view.View;
 import com.google.android.material.navigation.NavigationView;
 import androidx.core.view.GravityCompat;
@@ -22,7 +22,6 @@ import android.util.Log;
 import android.widget.Button;
 import android.widget.ImageView;
 
-import com.androidtutorialshub.loginregister.activities.TipsActivity;
 import com.androidtutorialshub.loginregister.activities.SongListActivity;
 import com.androidtutorialshub.loginregister.sql.SongDBHelper;
 import com.spotify.android.appremote.api.ConnectionParams;
@@ -31,7 +30,6 @@ import com.spotify.android.appremote.api.SpotifyAppRemote;
 
 import com.spotify.protocol.client.CallResult;
 import com.spotify.protocol.client.Subscription;
-import com.spotify.protocol.types.ImageUri;
 import com.spotify.protocol.types.PlayerState;
 import com.spotify.protocol.types.Track;
 
@@ -42,12 +40,27 @@ public class MainActivity extends AppCompatActivity
 
     private final AppCompatActivity activity = MainActivity.this;
 
-    private String CLIENT_ID;
-    private String REDIRECT_URI;
+    private String CLIENT_ID = "CLIENT_ID";
+    private String REDIRECT_URI = "REDIRECT_URI";
+    private String currClientID;
+    private String currRedirectURI;
     private SpotifyAppRemote mSpotifyAppRemote;
     private String text = "";
-
     private SongDBHelper songDBHelper;
+
+    Button new_snap;
+    ConnectionParams connectionParams;
+
+
+    @Override
+    public void onSaveInstanceState(Bundle savedInstanceState) {
+        // Save the user's current game state
+        savedInstanceState.putString(CLIENT_ID, currClientID);
+        savedInstanceState.putString(REDIRECT_URI, currRedirectURI);
+
+        // Always call the superclass so it can save the view hierarchy state
+        super.onSaveInstanceState(savedInstanceState);
+    }
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -74,13 +87,15 @@ public class MainActivity extends AppCompatActivity
         NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
 
-        Button new_snap = (Button) findViewById(R.id.button);
+        new_snap = (Button) findViewById(R.id.button);
+        new_snap.setEnabled(false);
         new_snap.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                Intent intentMain = new Intent(getApplicationContext(), TimerPageActivity.class);
-                startActivity(intentMain);
-                Log.i("Content "," Go to Tips page. ");
+                Intent intentTimerPage = new Intent(getApplicationContext(), TimerPageActivity.class);
+                intentTimerPage.putExtra("CLIENT_ID", currClientID);
+                intentTimerPage.putExtra("REDIRECT_URI", currRedirectURI);
+                startActivity(intentTimerPage);
             }
         });
 
@@ -145,10 +160,14 @@ public class MainActivity extends AppCompatActivity
         if (id == R.id.nav_tippage) {
             // Handle the camera action
             Intent intentMain = new Intent(MainActivity.this,
-                    TipsActivity.class);
+                    MainActivity.class);
             MainActivity.this.startActivity(intentMain);
             Log.i("Content "," Main layout ");
         } else if (id == R.id.nav_history) {
+            Intent intentMain = new Intent(MainActivity.this,
+                    SongListActivity.class);
+            MainActivity.this.startActivity(intentMain);
+            Log.i("Content "," Main layout ");
 
         } else if (id == R.id.nav_slideshow) {
 
@@ -168,11 +187,11 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onStart() {
         super.onStart();
-        CLIENT_ID = getIntent().getStringExtra("CLIENT_ID");
-        REDIRECT_URI = getIntent().getStringExtra("REDIRECT_URI");
-        ConnectionParams connectionParams =
-                new ConnectionParams.Builder(CLIENT_ID)
-                        .setRedirectUri(REDIRECT_URI)
+        currClientID = getIntent().getStringExtra("CLIENT_ID");
+        currRedirectURI = getIntent().getStringExtra("REDIRECT_URI");
+        connectionParams =
+                new ConnectionParams.Builder(currClientID)
+                        .setRedirectUri(currRedirectURI)
                         .showAuthView(true)
                         .build();
 
@@ -256,6 +275,7 @@ public class MainActivity extends AppCompatActivity
                                     @Override
                                     public void onClick(View view) {
                                         mSpotifyAppRemote.getPlayerApi().play("spotify:playlist:29z6MBXfjJho9J2vQ32R8J");
+                                        new_snap.setEnabled(true);
                                     }
                                 });
                             }
@@ -292,9 +312,4 @@ public class MainActivity extends AppCompatActivity
                 });
     }
 
-    @Override
-    protected void onStop() {
-        super.onStop();
-        SpotifyAppRemote.disconnect(mSpotifyAppRemote);
-    }
 }

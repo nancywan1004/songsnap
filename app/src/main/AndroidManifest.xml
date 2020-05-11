@@ -54,11 +54,6 @@
         <activity
             android:name=".activities.TimerPageActivity"
             android:screenOrientation="portrait" />
-        <activity
-            android:name=".activities.TipsActivity"
-            android:screenOrientation="portrait"
-            android:theme="@style/AppTheme">
-        </activity>
 
         <meta-data
             android:name="preloaded_fonts"
