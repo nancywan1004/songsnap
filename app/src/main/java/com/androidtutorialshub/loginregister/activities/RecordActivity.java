@@ -18,6 +18,8 @@ import android.widget.Toast;
 
 import java.io.File;
 import java.io.IOException;
+import java.net.URI;
+import java.net.URISyntaxException;
 import java.util.Random;
 
 import static android.Manifest.permission.RECORD_AUDIO;
@@ -39,6 +41,7 @@ public class RecordActivity extends AppCompatActivity {
     Random random;
     String RandomAudioFileName = "ABCDEFGHIJKLMNOP";
     MediaPlayer mediaPlayer;
+    Uri musicRecording;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -129,7 +132,9 @@ public class RecordActivity extends AppCompatActivity {
                 mediaPlayer = new MediaPlayer();
                 try {
 //                    mediaPlayer.setDataSource(AudioSavePathInDevice);
-                    mediaPlayer.setDataSource(getApplicationContext(), Uri.fromFile(new File(getIntent().getStringExtra("SONG_AUDIO"))));
+                    String musicRecordingPath = Uri.fromFile(new File(getIntent().getStringExtra("SONG_AUDIO"))).getPath();
+                    musicRecording = Uri.parse(musicRecordingPath);
+                    mediaPlayer.setDataSource(musicRecording.getPath());
                     mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mp) {
