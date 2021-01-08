@@ -131,10 +131,11 @@ public class RecordActivity extends AppCompatActivity {
 
                 mediaPlayer = new MediaPlayer();
                 try {
-//                    mediaPlayer.setDataSource(AudioSavePathInDevice);
-                    String musicRecordingPath = Uri.fromFile(new File(getIntent().getStringExtra("SONG_AUDIO"))).getPath();
-                    musicRecording = Uri.parse(musicRecordingPath);
-                    mediaPlayer.setDataSource(musicRecording.getPath());
+                    mediaPlayer.setDataSource(AudioSavePathInDevice);
+                    // TODO: append recommendation to the music clip to create a snap
+//                    String musicRecordingPath = Uri.fromFile(new File(getIntent().getStringExtra("SONG_AUDIO"))).getPath();
+//                    musicRecording = Uri.parse(musicRecordingPath);
+//                    mediaPlayer.setDataSource(musicRecording.getPath());
                     mediaPlayer.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
                         @Override
                         public void onPrepared(MediaPlayer mp) {
