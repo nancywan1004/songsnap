@@ -3,13 +3,16 @@
 ### Description:
 Song Snap is a mobile application where you can share your favourite Spotify music to your friend with your recommendations, just like a DJ.
 
+
+### Demo(Interfaces)
+<img src="demo/demo.gif" width="300" height="550">
+
 ### Technologies:
 Java, Android Studio.
 
 ### Contributors:
-Nancy(Leqi) Wan
-
-Angela Tian
+1. Nancy(Leqi) Wan
+2. Angela Tian
 
 ***Remark***: The project was originally created at the Cmd-f hackathon @ UBC in 2019.
 
@@ -47,10 +50,6 @@ Angela Tian
 `app/src/main/res/layout/activity_timer_page`: External voice recorder interface
 
 `app/src/main/res/layout/activity_countdown`: Media(music) recorder interface
-
-
-### Demo(Interfaces)
-<img src="demo/demo.gif" width="300" height="550">
 
 ### Running the project:
 Since ***gradle*** is used to build the project, but there may be build errors for multiple reasons(e.g. invalid build cache, outdated dependencies, etc.), it is usually recommended to follow the steps below when trying to run the project once in a while/for the first time:
