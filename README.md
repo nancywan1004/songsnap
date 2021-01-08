@@ -3,6 +3,9 @@
 ### Description:
 Song Snap is a mobile application where you can share your favourite Spotify music to your friend with your recommendations, just like a DJ.
 
+### Technologies:
+Java, Android Studio.
+
 ### Contributors:
 Nancy(Leqi) Wan
 
