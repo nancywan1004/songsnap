@@ -5,6 +5,7 @@ Song Snap is a mobile application where you can share your favourite Spotify mus
 
 ### Contributors:
 Nancy(Leqi) Wan
+
 Angela Tian
 
 ***Remark***: The project was originally created at the Cmd-f hackathon @ UBC in 2019.
@@ -18,6 +19,7 @@ Angela Tian
 
 ### Architecture:
 ***Activities/Controllers***
+
 `app/src/main/java/MainActivity`: Page navigation and play/pause/shift current song track
 
 `app/src/main/java/activities/com.androidtutorialshub.loginregister/RegisterActivity`: Registration and login
@@ -32,6 +34,7 @@ Angela Tian
 
 
 ***Layouts/Views***
+
 `app/src/main/res/layout/app_bar_main`: Main page
 
 `app/src/main/res/layout/activity_login` + `app/src/main/res/layout/activity_register`: User login and new user registration interface
@@ -44,7 +47,7 @@ Angela Tian
 
 
 ### Demo(Interfaces)
-<img src="demo/demo.gif" width="400" height="600">
+<img src="demo/demo.gif" width="300" height="550">
 
 ### Running the project:
 Since ***gradle*** is used to build the project, but there may be build errors for multiple reasons(e.g. invalid build cache, outdated dependencies, etc.), it is usually recommended to follow the steps below when trying to run the project once in a while/for the first time:
